@@ -67,7 +67,7 @@ for CLIENT in $CLIENT_LIST; do
         cat <<EOF >> "$WG_DIR/wg0.conf"
 
 [Peer]
-Name = $CLIENT
+# config for client: $CLIENT
 PublicKey = $C_PUB
 PresharedKey = $C_PSK
 AllowedIPs = $CLIENT_IP/32
