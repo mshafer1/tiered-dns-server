@@ -117,7 +117,7 @@ EOF
 # config for client: $CLIENT
 PublicKey = $C_PUB
 PresharedKey = $C_PSK
-AllowedIPs = $SERVER_IP/32
+AllowedIPs = $CLIENT_IP/32
 EOF
 
     IP_COUNTER=$((IP_COUNTER + 1))
