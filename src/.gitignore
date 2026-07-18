@@ -1,1 +1,3 @@
 rendered_config/
+etc-dnsmasq.d/
+etc-pihole/

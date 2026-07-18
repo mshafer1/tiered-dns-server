@@ -37,4 +37,31 @@ services:
     networks:
       external:
       internal:
-        # ipv4_address: 172.19.0.3
+        ipv4_address: 172.19.0.5 # Specify the IP address so that it can only listen on the internal network and not be exposed to the outside world
+  pihole:
+    image: mshafer1/pihole:pihole_v6@sha256:b64ee09ea541b4a68fe996e3f5431867f0030a9ca1d04f0baaf405ab70b914de
+    container_name: pihole
+    depends_on:
+      config-render:
+        condition: service_completed_successfully
+      dnscrypt-proxy:
+        condition: service_started
+    restart: unless-stopped
+    environment:
+      TZ: ${TZ:-UTC}
+      FTLCONF_webserver_api_password: '${PIHOLE_WEBPASSWORD:?PIHOLE_WEBPASSWORD is not set}' # required
+      FTLCONF_dns_listeningMode: 'ALL' # Allows any reachable client to send queries
+      FTLCONF_dns_upstreams: '172.19.0.5#5053' # Specifies your container address and port
+    volumes:
+      - './etc-pihole:/etc/pihole'
+      - './etc-dnsmasq.d:/etc/dnsmasq.d'
+    ports:
+      - "127.0.0.1:53:53/tcp"
+      - "127.0.0.1:53:53/udp"
+      - "127.0.0.1:67:67/udp"
+      - "127.0.0.1:123:123/udp"
+      - "4080:80/tcp" # TODO: localhost only
+      - "40443:443/tcp" # TODO: localhost only
+    networks:
+      external:
+      internal:
