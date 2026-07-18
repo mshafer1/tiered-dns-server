@@ -1,0 +1,40 @@
+networks:
+  internal:
+    driver: macvlan
+    internal: true
+    # no/default parent
+    ipam:
+      config:
+        - subnet: "172.19.0.0/24"
+          ip_range: "172.19.0.0/24"
+          # no gateway
+  external:
+    driver: bridge
+
+services:
+  config-render:
+    image: mshafer1/envsubst:envsubst_1@sha256:da65980ec6494cdd7b1c17c33abad7a6f0ff9d39795b4eb286a8fbbc36d25c79
+    container_name: config-render
+    volumes:
+      - ./dnscrypt-proxy.toml:/config-in/dnscrypt-proxy.toml:ro
+      - ./rendered_config/:/config-out/:rw
+    entrypoint: ["/bin/sh", "-c"]
+    environment:
+      - UPSTREAM_DNS=${UPSTREAM_DNS:-cloudflare-family}
+    command: ["envsubst < /config-in/dnscrypt-proxy.toml > /config-out/dnscrypt-proxy.toml"]
+  dnscrypt-proxy:
+    image: mshafer1/dnscrypt-proxy:dnscrypt-proxy_2@sha256:ec93b99ea82d2b39f5509f7ac5cb8106cc50010cf102753fe2b2a5f1252484ea
+    container_name: dnscrypt-proxy
+    depends_on:
+      config-render:
+        condition: service_completed_successfully
+    restart: unless-stopped
+    environment:
+      TZ: ${TZ:-UTC}
+    volumes:
+      - ./rendered_config/dnscrypt-proxy.toml:/config/dnscrypt-proxy.toml:ro
+    # not exposing ports outside of stack
+    networks:
+      external:
+      internal:
+        # ipv4_address: 172.19.0.3
