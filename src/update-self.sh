@@ -1,7 +1,7 @@
 #!/bin/bash -v
 set -euo pipefail
 
-pushd "$(dirname "$0")"
+pushd $(realpath "$(dirname "$0")")
 git pull origin main
 
 # primarily concerned with updating docker-compose file
