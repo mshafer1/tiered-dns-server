@@ -1,0 +1,11 @@
+#!/bin/bash -v
+set -euo pipefail
+
+pushd "$(dirname "$0")"
+git pull origin main
+
+# primarily concerned with updating docker-compose file
+docker compose pull
+docker compose down
+docker compose up -d
+popd
