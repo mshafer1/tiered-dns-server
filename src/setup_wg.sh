@@ -13,7 +13,7 @@ WG_DIR="/etc/wireguard"
 IP_PREFIX="172.29.0"
 SERVER_IP="${IP_PREFIX}.1"
 CLIENT_IP_CIDR_SUFFIX="/24"
-SERVER_PUBLIC_IP=$(curl -s https://ipify.org) # Dynamically fetches your Linode's public IP
+SERVER_PUBLIC_IP=$(curl -s https://api.ipify.org/) # Dynamically fetches your Linode's public IP
 SERVER_PORT="${WIREGUARD_PORT:-51820}" # port to be provided by the user in the UDF, or you can hardcode it here
 
 # 2. Ensure WireGuard and QR tools are installed
@@ -117,7 +117,7 @@ EOF
 # config for client: $CLIENT
 PublicKey = $C_PUB
 PresharedKey = $C_PSK
-AllowedIPs = $CLIENT_IP/32
+AllowedIPs = $SERVER_IP/32
 EOF
 
     IP_COUNTER=$((IP_COUNTER + 1))
