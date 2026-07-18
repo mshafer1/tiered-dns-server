@@ -4,3 +4,4 @@ set -euo pipefail
 apt-get update && apt-get install -y curl nano ca-certificates
 
 bash src/install_docker.sh
+bash src/setup_ufw.sh
