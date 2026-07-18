@@ -15,6 +15,9 @@ services:
   config-render:
     image: mshafer1/envsubst:envsubst_1@sha256:da65980ec6494cdd7b1c17c33abad7a6f0ff9d39795b4eb286a8fbbc36d25c79
     container_name: config-render
+    env_file:
+      - .env
+      - ../.env
     volumes:
       - ./dnscrypt-proxy.toml:/config-in/dnscrypt-proxy.toml:ro
       - ./rendered_config/:/config-out/:rw
@@ -29,6 +32,9 @@ services:
       config-render:
         condition: service_completed_successfully
     restart: unless-stopped
+    env_file:
+      - .env
+      - ../.env
     environment:
       TZ: ${TZ:-UTC}
     volumes:
@@ -41,6 +47,9 @@ services:
   pihole:
     image: mshafer1/pihole:pihole_v6@sha256:b64ee09ea541b4a68fe996e3f5431867f0030a9ca1d04f0baaf405ab70b914de
     container_name: pihole
+    env_file:
+      - .env
+      - ../.env
     depends_on:
       config-render:
         condition: service_completed_successfully
