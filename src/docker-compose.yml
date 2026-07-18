@@ -60,8 +60,8 @@ services:
       - "127.0.0.1:53:53/udp"
       - "127.0.0.1:67:67/udp"
       - "127.0.0.1:123:123/udp"
-      - "4080:80/tcp" # TODO: localhost only
-      - "40443:443/tcp" # TODO: localhost only
+      - "127.0.0.1:${HTTP_PREFIX-80}80:80/tcp"
+      - "127.0.0.1:${HTTP_PREFIX-80}443:443/tcp"
     networks:
       external:
       internal:
