@@ -63,16 +63,6 @@ for CLIENT in $CLIENT_LIST; do
         C_PUB=$(cat "$CLIENT_PUB_FILE")
         C_PSK=$(cat "$CLIENT_PSK_FILE")
         
-        # Append the existing client to the server configuration
-        cat <<EOF >> "$WG_DIR/wg0.conf"
-
-[Peer]
-# config for client: $CLIENT
-PublicKey = $C_PUB
-PresharedKey = $C_PSK
-AllowedIPs = $CLIENT_IP/32
-EOF
-
     else
         echo "Creating brand new IN-MEMORY configuration for client: $CLIENT"
         
@@ -85,16 +75,6 @@ EOF
         echo "$C_PUB" > "$CLIENT_PUB_FILE"
         echo "$C_PSK" > "$CLIENT_PSK_FILE"
         chmod 600 "$CLIENT_PUB_FILE" "$CLIENT_PSK_FILE"
-
-        # 3. Append to the server configuration (Server does NOT need the client's private key)
-        cat <<EOF >> "$WG_DIR/wg0.conf"
-
-[Peer]
-# config for client: $CLIENT
-PublicKey = $C_PUB
-PresharedKey = $C_PSK
-AllowedIPs = $CLIENT_IP/32
-EOF
 
         # 4. Generate the client profile text inside a RAM variable (No file creation)
         CLIENT_CONF_TEXT=$(cat <<EOF
@@ -110,7 +90,7 @@ AllowedIPs = $SERVER_IP/32
 EOF
 )
 
-        # 5. Output the configuration and QR code to the terminal log
+        # 4. Output the configuration and QR code to the terminal log
         echo "=========================================================="
         echo " FIRST-TIME CONFIGURATION GENERATED FOR CLIENT: $CLIENT"
         echo " WARNING: The PrivateKey below is NOT saved to this server!"
@@ -125,10 +105,20 @@ EOF
         echo "=========================================================="
         echo ""
 
-        # 6. Explicitly clear the sensitive private variables from memory immediately
+        # 5. Explicitly clear the sensitive private variables from memory immediately
         unset C_PRIV
         unset CLIENT_CONF_TEXT
     fi
+
+    # 3. Append to the server configuration (Server does NOT need the client's private key)
+    cat <<EOF >> "$WG_DIR/wg0.conf"
+
+[Peer]
+# config for client: $CLIENT
+PublicKey = $C_PUB
+PresharedKey = $C_PSK
+AllowedIPs = $CLIENT_IP/32
+EOF
 
     IP_COUNTER=$((IP_COUNTER + 1))
 done
