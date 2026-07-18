@@ -1,7 +1,7 @@
 #!/bin/bash -v
 set -euo pipefail
 
-sed -e 's/#?DNSStubListener=.*/DNSStubListener=no/' -i /etc/systemd/resolved.conf
+sed -E -e 's/#?DNSStubListener=.*/DNSStubListener=no/' -i /etc/systemd/resolved.conf
 
 mv /etc/resolv.conf /etc/resolv.conf.bak
 
