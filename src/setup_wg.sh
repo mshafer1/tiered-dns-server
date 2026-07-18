@@ -1,7 +1,7 @@
 #!/bin/bash -v
 #
 # <UDF name="ClientNames" label="Client Names" example="laptop,phone,tablet" description="Comma-separated list of client names to provision." />
-# <UDF name="ServerPort" label="Server Port" example="51820" description="Port for the WireGuard server to listen on." />
+# <UDF name="WIREGUARD_PORT" label="Server Port" example="51820" description="Port for the WireGuard server to listen on." />
 # <UDF name="BackupLocation" label="Backup Location" default="/mnt/long-term" example="/mnt/long-term" description="Location to store WireGuard backup files." />
 
 set -euo pipefail
@@ -14,7 +14,7 @@ IP_PREFIX="172.29.0"
 SERVER_IP="${IP_PREFIX}.1"
 CLIENT_IP_CIDR_SUFFIX="/24"
 SERVER_PUBLIC_IP=$(curl -s https://ipify.org) # Dynamically fetches your Linode's public IP
-SERVER_PORT="${ServerPort:-51820}" # port to be provided by the user in the UDF, or you can hardcode it here
+SERVER_PORT="${WIREGUARD_PORT:-51820}" # port to be provided by the user in the UDF, or you can hardcode it here
 
 # 2. Ensure WireGuard and QR tools are installed
 apt-get update && apt-get install -y wireguard qrencode
