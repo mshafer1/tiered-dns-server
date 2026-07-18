@@ -10,7 +10,7 @@ set -euo pipefail
 MOUNT_DIR="${BackupLocation:-/mnt/long-term}"
 KEY_DIR="$MOUNT_DIR/wireguard_keys"
 WG_DIR="/etc/wireguard"
-IP_PREFIX="172.29.0"
+IP_PREFIX="172.29.0" # Warning, changing this requires also changing docker-compose.yml
 SERVER_IP="${IP_PREFIX}.1"
 CLIENT_IP_CIDR_SUFFIX="/24"
 SERVER_PUBLIC_IP=$(curl -s https://api.ipify.org/) # Dynamically fetches your Linode's public IP
