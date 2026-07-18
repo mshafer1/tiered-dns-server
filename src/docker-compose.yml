@@ -52,6 +52,7 @@ services:
       FTLCONF_webserver_api_password: '${PIHOLE_WEBPASSWORD:?PIHOLE_WEBPASSWORD is not set}' # required
       FTLCONF_dns_listeningMode: 'ALL' # Allows any reachable client to send queries
       FTLCONF_dns_upstreams: '172.19.0.5#5053' # Specifies your container address and port
+      PIHOLE_DNS_LOG_TO_FILE: 'true' # Enables logging of DNS queries to a file
     volumes:
       - './etc-pihole:/etc/pihole'
       - './etc-dnsmasq.d:/etc/dnsmasq.d'
