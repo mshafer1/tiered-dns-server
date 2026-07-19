@@ -66,5 +66,3 @@ EOF
 
 
 bash setup.sh
-
-
