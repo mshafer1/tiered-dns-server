@@ -3,7 +3,7 @@
 # <UDF name="hostname" label="Hostname" example="Enter the hostname for your Linode (e.g., bluesky)">
 # <UDF name="ClientNames" label="Client Names" example="laptop,phone,tablet" description="Comma-separated list of client names to provision." />
 # <UDF name="WIREGUARD_PORT" label="Server Port" example="51820" description="Port for the WireGuard server to listen on." />
-# <UDF name="BackupLocation" label="Backup Location" default="/mnt/long-term" example="/mnt/long-term" description="Location to store WireGuard backup files." />
+# <UDF name="BackupLocation" label="Backup Location" default="/mnt/tiered_dns_backup" example="/mnt/tiered_dns_backup" description="Location to store WireGuard backup files." />
 # <UDF name="HTTP_PREFIX" label="HTTP Prefix" default="" example="10" description="HTTP port prefix for the web server. (e.g., 10 for ports 1080 and 10443)" />
 # <UDF name="PIHOLE_WEBPASSWORD" label="Pi-hole Web Password" example="your-actually-long-password" description="Password for the Pi-hole web interface." />
 # <UDF name="UPSTREAM_DNS" label="Upstream DNS" default="cloudflare-family" example="cloudflare-family" description="Upstream DNS server for Pi-hole. Options: see dnscrypt-proxy list: https://github.com/DNSCrypt/dnscrypt-resolvers/blob/master/v3/public-resolvers.md" />

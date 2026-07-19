@@ -7,7 +7,7 @@
 set -euo pipefail
 
 # 1. Define paths and network parameters
-MOUNT_DIR="${BackupLocation:-/mnt/long-term}"
+MOUNT_DIR="${BackupLocation:-/mnt/long-term}/wg_backup"
 KEY_DIR="$MOUNT_DIR/wireguard_keys"
 WG_DIR="/etc/wireguard"
 IP_PREFIX="172.29.0" # Warning, changing this requires also changing docker-compose.yml
