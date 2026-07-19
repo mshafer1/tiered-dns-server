@@ -3,11 +3,13 @@ set -euo pipefail
 
 apt-get update && apt-get install -y curl nano ca-certificates
 
+# this needs to be early so that the rest of the setup can use it
+bash src/setup_rsnapshot.sh  || exit $?
+
 bash src/install_docker.sh  || exit $?
 bash src/setup_ufw.sh  || exit $?
 bash src/setup_updates.sh  || exit $?
 bash src/setup_wg.sh  || exit $?
-bash src/setup_rsnapshot.sh  || exit $?
 
 if [ "${BACKUP_TO_RESTORE:-}" != "" ]; then
     # not quoting because it should be two args, the backup name and the snapshot index, separated by a space
