@@ -95,7 +95,7 @@ cat > /etc/cron.d/rsnapshot << EOF
 30 23 1 * * root /usr/bin/rsnapshot monthly
 EOF
 
-if [ mount | grep -q "${BackupLocation}" ]; then
+if [[ mountpoint -q "${BackupLocation}" ]]; then
     echo "Backup location ${BackupLocation} is already mounted."
     mkdir -p ${BackupLocation}/snapshots/
 else
