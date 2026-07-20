@@ -61,3 +61,112 @@ Running Pi-hole at this level allows for a second layer of shared filtering.
 Finally, the on-prem nodes are also able to filter their own lists (without forwarding).
 
 In this way, there are 3 tiers of configuration available.
+
+
+## Deploying
+
+Example stack script to deploy on Linode (NOTE: for convenience, some secrets are added to this script, do NOT make public)
+```bash
+#!/bin/bash
+#<UDF name="TOKEN_PASSWORD" label="Api token for attaching volume">
+#<UDF name="restore_backup" label="Backup to restore from (optional)" example="hourly 1" default="">
+#<UDF name="git_branch" label="Git Branch for source" default="main">
+
+set -euo pipefail
+trap 'echo "Error occurred on line $LINENO"; exit 1' ERR
+
+exec > >(tee -i /var/log/stackscript_1.log)
+
+# ================================================================
+# Set config vars needed in core script
+# ================================================================
+
+export hostname=dns_hub
+export fqdn=pihole.dns_hub.lan
+export ClientNames=comma,separate,list-of-names,to,generate-configs-for
+export BackupLocation=/mnt/tiered_dns_backup
+export restore_backup="${restore_backup:-}"
+export HTTP_PREFIX=""
+export PIHOLE_WEBPASSWORD="..." # TODO: set this
+export GIT_BRANCH="${git_branch:-main}"
+export TZ=UTC
+export WIREGUARD_PORT=... # TODO: pick a random port. Suggestion: python3 -c "import string, secrets; print(''.join(secrets.choice(string.digits) for _ in range(4)))"
+
+# set time zone
+timedatectl set-timezone ${TZ}
+
+# ================================================================
+# Attach and mount backup storage - used for persistent keys and back ups across deployments
+# ================================================================
+
+# pre-requisite
+. <ssinclude StackScriptID="1">
+
+. <ssinclude StackScriptID="632759">
+
+# TODO: set this to the ID of the desired volume to attach
+backupVolumeName=dns-hub-backup
+
+attach_volume ${backupVolumeName}
+
+cat >> /etc/fstab <<EOF
+/dev/disk/by-id/scsi-0Linode_Volume_${backupVolumeName} ${BackupLocation} ext4 defaults,noatime,nofail 0 2
+EOF
+
+systemctl daemon-reload
+mkdir -p ${BackupLocation}
+
+volume_label="${backupVolumeName}"
+mount_point="${BackupLocation}"
+volume_path="$(
+        get_volume_property "$volume_label" 'filesystem_path' | sed 's/"//g'
+)"
+
+echo "Expecting drive to exist at $volume_path"
+
+wait_for_volume() {
+# Wait for the volume to become available before proceeding
+local x=20
+
+while [ $x -gt 0 ]; do
+  if [ -e $volume_path ]; then
+     return
+  else
+    sleep 1
+  fi
+  ((x-=1))
+done
+}
+
+wait_for_volume
+
+if [ ! -e $volume_path ]; then
+echo "- - -" | sudo tee /sys/class/scsi_host/host*/scan
+wait_for_volume
+fi
+
+if [ ! -e $volume_path ]; then
+echo "Drive still not attached!"
+exit 1
+fi
+
+mount -a
+
+sleep 1
+
+# check that it is actually mounted
+mountpoint ${BackupLocation} || exit 1
+
+# ================================================================
+# Include core
+# ================================================================
+# apparently there's nothing "stacked" about these...
+echo <ssinclude StackScriptID="1">
+echo <ssinclude StackScriptID="632759">
+echo <ssinclude StackScriptID="2165897">
+
+<ssinclude StackScriptID="2165897">
+
+
+figlet Success
+```
