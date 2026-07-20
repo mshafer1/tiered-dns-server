@@ -117,7 +117,7 @@ cp -r --dereference -f "\${srcDir}/localhost${backed_up_folder}/" "${backed_up_f
 
 echo "Resetting tracked files"
 cd ${backed_up_folder}
-git checkout .
+git checkout -- .
 
 figlet "Backup restored"
 EOF

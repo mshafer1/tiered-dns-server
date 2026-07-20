@@ -44,14 +44,18 @@ Address = ${SERVER_IP}${CLIENT_IP_CIDR_SUFFIX}
 ListenPort = $SERVER_PORT
 EOF
 
-# 6. Parse and Loop through the $ClientNames variable
+: "${ClientNames:?ClientNames is required (comma-separated list of client names)}"
 CLIENT_LIST=$(echo "$ClientNames" | tr ',' ' ')
-IP_COUNTER=2 
+IP_COUNTER=2
 
 for CLIENT in $CLIENT_LIST; do
     # use xargs to trim whitespace from the client name
     CLIENT=$(echo "$CLIENT" | xargs | tr -d '\n')
-    
+    if [[ ! "$CLIENT" =~ ^[A-Za-z0-9_-]+$ ]]; then
+        echo "Invalid client name '$CLIENT' (allowed: A-Za-z0-9_-)" >&2
+        exit 1
+    fi
+
     CLIENT_IP="${IP_PREFIX}.${IP_COUNTER}"
     CLIENT_PUB_FILE="$KEY_DIR/${CLIENT}.pub"
     CLIENT_PSK_FILE="$KEY_DIR/${CLIENT}.psk"

@@ -83,7 +83,7 @@ exec > >(tee -i /var/log/stackscript_1.log)
 
 export hostname=dns_hub
 export fqdn=pihole.dns_hub.lan
-export ClientNames=comma,seperate,list-of-names,to,generate-configs-for
+export ClientNames=comma,separate,list-of-names,to,generate-configs-for
 export BackupLocation=/mnt/tiered_dns_backup
 export restore_backup="${restore_backup:-}"
 export HTTP_PREFIX=""
@@ -107,18 +107,16 @@ timedatectl set-timezone ${TZ}
 # TODO: set this to the ID of the desired volume to attach
 backupVolumeName=dns-hub-backup
 
-attach_volume ${backupVolumeName}$
-
-sleep 5
+attach_volume ${backupVolumeName}
 
 cat >> /etc/fstab <<EOF
-/dev/disk/by-id/scsi-0Linode_Volume_${backupVolumeName}$ ${BackupLocation} ext4 defaults,noatime,nofail 0 2
+/dev/disk/by-id/scsi-0Linode_Volume_${backupVolumeName} ${BackupLocation} ext4 defaults,noatime,nofail 0 2
 EOF
 
 systemctl daemon-reload
 mkdir -p ${BackupLocation}
 
-volume_label="${backupVolumeName}$"
+volume_label="${backupVolumeName}"
 mount_point="${BackupLocation}"
 volume_path="$(
         get_volume_property "$volume_label" 'filesystem_path' | sed 's/"//g'

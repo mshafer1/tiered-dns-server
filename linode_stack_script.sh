@@ -1,4 +1,4 @@
-#!/bin/bash -v
+#!/bin/bash
 #
 # <UDF name="hostname" label="Hostname" example="Enter the hostname for your Linode (e.g., bluesky)">
 # <UDF name="ClientNames" label="Client Names" example="laptop,phone,tablet" description="Comma-separated list of client names to provision." />
@@ -31,9 +31,10 @@ apt-get install --no-install-recommends -y ${packages_to_install}
 # endregion
 
 # region setup networking
-hostnamectl set-hostname $hostname
+hostnamectl set-hostname "$hostname"
 figlet "Welcome to $hostname !"
-echo $server_public_ip $fqdn $hostname >> /etc/hosts
+fqdn="${fqdn:-$hostname}"
+echo "$server_public_ip $fqdn $hostname" >> /etc/hosts
 # endregion
 
 # region generate SSH key
