@@ -1,6 +1,11 @@
 #!/bin/bash -v
 set -euo pipefail
 
+if [[ ! "$CLIENT_LIST" =~ ^[A-Za-z0-9_-,]*$ ]]; then
+    echo "Invalid client name in '$CLIENT_LIST' (allowed: A-Za-z0-9_-,)" >&2
+    exit 1
+fi
+
 apt-get update && apt-get install -y curl nano ca-certificates
 
 # this needs to be early so that the rest of the setup can use it
