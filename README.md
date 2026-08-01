@@ -19,7 +19,7 @@ Because DNS filtering for basic trojan and malware sites is becoming a must.
              │                            │                                 │
              │                            │                                 │
              │                            │                                 │
-             │                            │      (wiregaurd tunnels)        │
+             │                            │      (wireguard tunnels)        │
              │                            │                                 │
              │                            │                                 │
     ┌────────▼───────────┐     ┌──────────▼─────────┐         ┌─────────────▼──────┐
