@@ -4,7 +4,7 @@ set -euo pipefail
 
 apt-get install --no-install-recommends -y rsnapshot
 
-backed_up_folder=/app/tiered-dns-server/src/
+app_backup_folder=/app/tiered-dns-server/src/
 
 # use literal \t in the config file, but replace with actual tab characters before writing to file
 # this ensures editors / git don't introduce spaces instead of tabs, which would break rsnapshot
@@ -83,7 +83,7 @@ loglevel\t3
 lockfile\t/var/run/rsnapshot.pid
 
 # LOCALHOST
-backup\t${backed_up_folder}\tlocalhost/
+backup\t${app_backup_folder}\tlocalhost/
 EOF
 
 sed -e 's/\\t/\t/g' -i /etc/rsnapshot.conf
@@ -104,7 +104,7 @@ else
 fi
 
 restore_script=/usr/local/bin/restore-backup
-dest_dir=$(dirname "${backed_up_folder}")
+dest_dir=$(dirname "${app_backup_folder}")
 cat > ${restore_script} << EOF
 #!/bin/bash
 
@@ -113,11 +113,11 @@ trap 'echo "Error occurred on line $LINENO"; exit 1' ERR
 
 backupToRestoreFrom="\$1 \$2"
 srcDir="${BackupLocation}/snapshots/\${backupToRestoreFrom/ /.}"
-echo "Copying '\${srcDir}' to '${backed_up_folder}'"
-cp -r --dereference -f "\${srcDir}/localhost${backed_up_folder}" "${dest_dir}"
+echo "Copying '\${srcDir}' to '${app_backup_folder}'"
+cp -r --dereference -f "\${srcDir}/localhost${app_backup_folder}" "${dest_dir}"
 
 echo "Resetting tracked files"
-cd ${backed_up_folder}
+cd ${app_backup_folder}
 git checkout -- .
 
 figlet "Backup restored"
