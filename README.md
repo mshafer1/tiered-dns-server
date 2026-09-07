@@ -56,11 +56,11 @@ I will spare you the details on many of the choices in this tech stack, but if y
 
 ## How is this tiered?
 
-If an account is made with the upstream DNS server, it can be configured to do filtering.
+If an account is made with the upstream DNS server, it can be configured to do filtering (or use a DNS server that offers filtering already).
 Running Pi-hole at this level allows for a second layer of shared filtering.
 Finally, the on-prem nodes are also able to filter their own lists (without forwarding).
 
-In this way, there are 3 tiers of configuration available.
+Ergo, there are 3 tiers of filtering in a standard deployment.
 
 
 ## Deploying
