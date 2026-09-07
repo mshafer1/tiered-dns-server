@@ -104,6 +104,7 @@ else
 fi
 
 restore_script=/usr/local/bin/restore-backup
+dest_dir=$(dirname "${backed_up_folder}")
 cat > ${restore_script} << EOF
 #!/bin/bash
 
@@ -113,7 +114,7 @@ trap 'echo "Error occurred on line $LINENO"; exit 1' ERR
 backupToRestoreFrom="\$1 \$2"
 srcDir="${BackupLocation}/snapshots/\${backupToRestoreFrom/ /.}"
 echo "Copying '\${srcDir}' to '${backed_up_folder}'"
-cp -r --dereference -f "\${srcDir}/localhost${backed_up_folder}/" "${backed_up_folder}/"
+cp -r --dereference -f "\${srcDir}/localhost${backed_up_folder}" "${dest_dir}"
 
 echo "Resetting tracked files"
 cd ${backed_up_folder}
