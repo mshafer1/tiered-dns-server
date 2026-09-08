@@ -63,12 +63,13 @@ services:
       - './etc-pihole:/etc/pihole'
       - './etc-dnsmasq.d:/etc/dnsmasq.d'
     ports:
-      - "172.29.0.1:53:53/tcp"
-      - "172.29.0.1:53:53/udp"
-      - "172.29.0.1:67:67/udp"
-      - "172.29.0.1:123:123/udp"
-      - "172.29.0.1:${HTTP_PREFIX:-}80:80/tcp"
-      - "172.29.0.1:${HTTP_PREFIX:-}443:443/tcp"
+      - "127.0.0.1:53:53/tcp"
+      - "127.0.0.1:53:53/udp"
+      - "127.0.0.1:67:67/udp"
+      - "127.0.0.1:123:123/udp"
+      - "127.0.0.1:${HTTP_PREFIX:-40}80:80/tcp"
+      - "127.0.0.1:${HTTP_PREFIX:-40}443:443/tcp"
     networks:
-      external:
       internal:
+        ipv4_address: 172.19.0.6 # Specify the IP address for the pihole container on the internal network
+      external:

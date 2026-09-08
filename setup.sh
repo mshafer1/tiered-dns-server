@@ -31,3 +31,9 @@ pushd src
 docker compose pull
 docker compose up -d
 popd
+
+if [ "${{FQDN//./}}" == "${FQDN}" ]; then
+    echo "FQDN is not set (or not set to a domain), skipping TLS setup"
+else
+    bash src/setup_tls_termination.sh  || exit $?
+fi

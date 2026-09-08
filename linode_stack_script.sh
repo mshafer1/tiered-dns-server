@@ -8,6 +8,8 @@
 # <UDF name="PIHOLE_WEBPASSWORD" label="Pi-hole Web Password" example="your-actually-long-password" description="Password for the Pi-hole web interface." />
 # <UDF name="UPSTREAM_DNS" label="Upstream DNS" default="cloudflare-family" example="cloudflare-family" description="Upstream DNS server for Pi-hole. Options: see dnscrypt-proxy list: https://github.com/DNSCrypt/dnscrypt-resolvers/blob/master/v3/public-resolvers.md" />
 # <UDF name="TZ" label="Timezone" default="UTC" example="America/New_York" description="Timezone for the server." />
+# <UDF name="TLS_RESETUP_FORCE" label="Force TLS Setup" default="" example="true" description="Force re-setup of TLS config and certificates." />
+# <UDF name="ACME_DNS_USE_MTLS" label="Use mTLS for acme-dns" default="true" example="true" description="Use mutual TLS for acme-dns authentication." />
 
 # Exit on error, and log output to /var/log/stackscript.log
 set -euo pipefail
