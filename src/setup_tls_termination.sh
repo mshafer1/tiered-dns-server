@@ -52,7 +52,6 @@ else
     CERTBOT_DOMAIN=${FQDN} CERTBOT_VALIDATION=placeholder /etc/letsencrypt/acme-dns-auth.py
 
     echo "Once DNS records are set, run the following command to register with acme-dns:"
-    echo "certbot -v --nginx -d ${FQDN} --agree-tos --non-interactive --cert-name ${FQDN} --manual-auth-hook /etc/letsencrypt/acme-dns-auth.py --preferred-challenges dns"
     echo "certbot --nginx -v --non-interactive --manual --manual-auth-hook /etc/letsencrypt/acme-dns-auth.py \
         --preferred-challenges dns --no-redirect --debug-challenges -d ${FQDN}"
     echo "#######"
@@ -65,7 +64,7 @@ fi
 
 # check if cert exists
 if [ -f /etc/letsencrypt/live/${FQDN}/fullchain.pem ]; then
-    echo "TLS certificate for ${FQDN} already exists"
+    echo "TLS certificate for ${FQDN} exists"
     nginx -t
     systemctl reload nginx
 else
