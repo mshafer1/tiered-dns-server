@@ -14,7 +14,9 @@ bash src/setup_rsnapshot.sh  || exit $?
 bash src/install_docker.sh  || exit $?
 bash src/setup_ufw.sh  || exit $?
 bash src/setup_updates.sh  || exit $?
-bash src/setup_wg.sh  || exit $?
+if [ "${SETUP_WG:-true,,}" == "true" ]; then
+    bash src/setup_wg.sh  || exit $?
+fi
 
 if [ "${BACKUP_TO_RESTORE:-}" != "" ]; then
     # not quoting because it should be two args, the backup name and the snapshot index, separated by a space

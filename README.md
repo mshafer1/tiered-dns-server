@@ -91,6 +91,7 @@ export PIHOLE_WEBPASSWORD="..." # TODO: set this
 export GIT_BRANCH="${git_branch:-main}"
 export TZ=UTC
 export WIREGUARD_PORT=... # TODO: pick a random port. Suggestion: python3 -c "import string, secrets; print(''.join(secrets.choice(string.digits) for _ in range(4)))"
+export SETUP_WG=true # optional. Without this, another remote-access setup (such as mesh networking) is needed to access.
 
 # set time zone
 timedatectl set-timezone ${TZ}
