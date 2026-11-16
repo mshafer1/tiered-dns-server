@@ -25,7 +25,8 @@ systemctl start doh-server
 # endregion
 
 # region: TLS config
-pipx install certbot || true # pipx considers already installed a failure
+export PIPX_BIN_DIR=/usr/local/bin
+pipx install --force certbot
 
 if which certbot; then
     echo "Certbot is installed"
@@ -33,10 +34,17 @@ else
     echo "Error: Certbot failed to install"
     exit 1
 fi
+ 
+certbot_bin=$(command -v certbot)
+cat > /etc/cron.d/certbot-renew <<EOF
+17 6 2,14 * * root ${certbot_bin} renew --quiet --deploy-hook "/usr/sbin/nginx -t && /usr/bin/systemctl reload nginx"
+EOF
+ 
 
 pipx inject certbot certbot-nginx || true # pipx considers already installed a failure
 
 
+mkdir -p /etc/letsencrypt
 wget -O /etc/letsencrypt/acme-dns-auth.py https://github.com/mshafer1/acme-dns-certbot-joohoi/raw/refs/heads/master/acme-dns-auth.py
 chmod +x /etc/letsencrypt/acme-dns-auth.py
 
