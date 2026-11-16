@@ -14,7 +14,10 @@ bash src/setup_rsnapshot.sh  || exit $?
 bash src/install_docker.sh  || exit $?
 bash src/setup_ufw.sh  || exit $?
 bash src/setup_updates.sh  || exit $?
-if [ "${SETUP_WG:-true,,}" == "true" ]; then
+SETUP_WG=${SETUP_WG:-true}
+SETUP_WG=${SETUP_WG,,}
+export SETUP_WG
+if [ "${SETUP_WG}" == "true" ]; then
     bash src/setup_wg.sh  || exit $?
 fi
 
@@ -34,8 +37,13 @@ docker compose pull
 docker compose up -d
 popd
 
-if [ "${{FQDN//./}}" == "${FQDN}" ]; then
+FQDN="${FQDN:-}" # Default to empty string if FQDN is not set
+
+if [ -z "${FQDN}" ] || [[ "${FQDN}" != *.* ]]; then
+    # no dot in FQDN
     echo "FQDN is not set (or not set to a domain), skipping TLS setup"
+elif [[ "${FQDN}" == *.lan ]]; then
+    echo "FQDN is a local domain (*.lan), skipping TLS setup"
 else
     bash src/setup_tls_termination.sh  || exit $?
 fi

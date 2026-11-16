@@ -35,8 +35,8 @@ apt-get install --no-install-recommends -y ${packages_to_install}
 # region setup networking
 hostnamectl set-hostname "$hostname"
 figlet "Welcome to $hostname !"
-fqdn="${fqdn:-$hostname}"
-echo "$server_public_ip $fqdn $hostname" >> /etc/hosts
+FQDN="${FQDN:-$hostname}"
+echo "$server_public_ip $FQDN $hostname" >> /etc/hosts
 # endregion
 
 # region generate SSH key

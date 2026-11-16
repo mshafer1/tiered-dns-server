@@ -78,7 +78,7 @@ exec > >(tee -i /var/log/stackscript_1.log)
 # ================================================================
 
 export hostname=dns_hub
-export fqdn=pihole.dns_hub.lan
+export FQDN=pihole.dns_hub.lan
 export ClientNames=comma,separate,list-of-names,to,generate-configs-for
 export BackupLocation=/mnt/tiered_dns_backup
 export restore_backup="${restore_backup:-}"
