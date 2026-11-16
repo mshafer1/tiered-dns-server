@@ -34,6 +34,12 @@ else
     echo "Error: Certbot failed to install"
     exit 1
 fi
+ 
+certbot_bin=$(command -v certbot)
+cat > /etc/cron.d/certbot-renew <<EOF
+17 6 2,14 * * root ${certbot_bin} renew --quiet --deploy-hook "/usr/sbin/nginx -t && /usr/bin/systemctl reload nginx"
+EOF
+ 
 
 pipx inject certbot certbot-nginx || true # pipx considers already installed a failure
 
