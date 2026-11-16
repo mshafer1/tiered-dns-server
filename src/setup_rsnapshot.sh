@@ -7,6 +7,7 @@ apt-get install --no-install-recommends -y rsnapshot
 app_backup_folder=/app/tiered-dns-server/src/
 letsencrypt_backup_folder=/etc/letsencrypt/
 nginx_config_backup_folder=/etc/nginx/
+mkdir -p "${letsencrypt_backup_folder}" "${nginx_config_backup_folder}"
 
 # use literal \t in the config file, but replace with actual tab characters before writing to file
 # this ensures editors / git don't introduce spaces instead of tabs, which would break rsnapshot
@@ -122,10 +123,14 @@ backupToRestoreFrom="\$1 \$2"
 srcDir="${BackupLocation}/snapshots/\${backupToRestoreFrom/ /.}"
 echo "Copying '\${srcDir}' to '${app_backup_folder}'"
 cp -r --dereference -f "\${srcDir}/localhost${app_backup_folder}" "${dest_dir}"
-echo "Copying '\${srcDir}' to '${letsencrypt_backup_folder}'"
-cp -r --dereference -f "\${srcDir}/localhost${letsencrypt_backup_folder}" "${letsencrypt_dest_dir}"
-echo "Copying '\${srcDir}' to '${nginx_config_backup_folder}'"
-cp -r --dereference -f "\${srcDir}/localhost${nginx_config_backup_folder}" "${nginx_config_dest_dir}"
+if [ -d "\${srcDir}/localhost${letsencrypt_backup_folder}" ]; then
+    echo "Copying '\${srcDir}' to '${letsencrypt_backup_folder}'"
+    cp -a -f "\${srcDir}/localhost${letsencrypt_backup_folder}" "${letsencrypt_dest_dir}"
+fi
+if [ -d "\${srcDir}/localhost${nginx_config_backup_folder}" ]; then
+    echo "Copying '\${srcDir}' to '${nginx_config_backup_folder}'"
+    cp -a -f "\${srcDir}/localhost${nginx_config_backup_folder}" "${nginx_config_dest_dir}"
+fi
 
 echo "Resetting tracked files in app"
 cd ${app_backup_folder}
