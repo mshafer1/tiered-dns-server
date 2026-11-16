@@ -7,7 +7,7 @@ force="${TLS_RESETUP_FORCE:-}"
 source_dir=$(dirname $0)
 
 # region: render templates
-if [ -f /etc/nginx/sites-available/pihole ] && [ -z "${force}" ]; then
+if [ -f /etc/nginx/sites-enabled/pihole ] && [ -z "${force}" ]; then
     echo "Skipping rendering nginx config to avoid resetting it"
     echo "use TLS_RESETUP_FORCE=t to force"
 else
