@@ -30,7 +30,7 @@ services:
     entrypoint: ["/bin/sh", "-c"]
     environment:
       - UPSTREAM_DNS=${UPSTREAM_DNS:-cloudflare-family}
-    command: ["envsubst < /config-in/dnscrypt-proxy.toml > /config-out/dnscrypt-proxy.toml"]
+    command: ["envsubst '${UPSTREAM_DNS}' < /config-in/dnscrypt-proxy.toml > /config-out/dnscrypt-proxy.toml"]
   dnscrypt-proxy:
     image: mshafer1/dnscrypt-proxy:dnscrypt-proxy_2@sha256:ec93b99ea82d2b39f5509f7ac5cb8106cc50010cf102753fe2b2a5f1252484ea
     container_name: dnscrypt-proxy

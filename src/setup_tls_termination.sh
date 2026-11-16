@@ -11,11 +11,12 @@ if [ -f /etc/nginx/sites-available/pihole ] && [ -z "${force}" ]; then
     echo "Skipping rendering nginx config to avoid resetting it"
     echo "use TLS_RESETUP_FORCE=t to force"
 else
-    envsubst < ${source_dir}/templates/nginx.conf > /etc/nginx/sites-enabled/pihole
+    # only replace FQDN and HTTP_PREFIX
+    envsubst '${FQDN} ${HTTP_PREFIX}' < ${source_dir}/templates/nginx.conf > /etc/nginx/sites-enabled/pihole
 fi
 
 
-envsubst < ${source_dir}/templates/doh-server.conf > /etc/dns-over-https/doh-server.conf
+envsubst '${FQDN}' < ${source_dir}/templates/doh-server.conf > /etc/dns-over-https/doh-server.conf
 # endregion
 
 # region: start up doh-server
@@ -46,7 +47,8 @@ if [ -f /etc/letsencrypt/conf.json ] && [ -z "${force}" ]; then
     echo "Skipping rendering acme-dns config to avoid resetting it"
     echo "use TLS_RESETUP_FORCE=t to force"
 else
-    envsubst < ${source_dir}/templates/acme-dns-conf.json > /etc/letsencrypt/conf.json
+    # replace only ${ACME_DNS_USE_MTLS} and ${ACME_DNS_URL}
+    envsubst '${ACME_DNS_USE_MTLS} ${ACME_DNS_URL}' < ${source_dir}/templates/acme-dns-conf.json > /etc/letsencrypt/conf.json
     # trigger registration / CNAME prompt
     echo "#######"
     CERTBOT_DOMAIN=${FQDN} CERTBOT_VALIDATION=placeholder /etc/letsencrypt/acme-dns-auth.py
