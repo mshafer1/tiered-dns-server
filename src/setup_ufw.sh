@@ -7,4 +7,6 @@ if [ "${SETUP_WG:-true,,}" == "true" ]; then
     ufw allow ${WIREGUARD_PORT}/udp
 fi
 ufw default deny incoming
-ufw --force enable
+(ufw --force enable || true)
+
+ufw status
