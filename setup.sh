@@ -6,19 +6,25 @@ if [[ ! "$ClientNames" =~ ^[A-Za-z0-9_,-]*$ ]]; then
     exit 1
 fi
 
+handleError() {
+    echo "An error occurred on line $1"
+    exit 1
+}
+trap 'handleError $LINENO' ERR
+
 apt-get update && apt-get install -y curl nano ca-certificates
 
 # this needs to be early so that the rest of the setup can use it
-bash src/setup_rsnapshot.sh  || exit $?
+bash src/setup_rsnapshot.sh
 
-bash src/install_docker.sh  || exit $?
-bash src/setup_ufw.sh  || exit $?
-bash src/setup_updates.sh  || exit $?
+bash src/install_docker.sh
+bash src/setup_ufw.sh
+bash src/setup_updates.sh
 SETUP_WG=${SETUP_WG:-true}
 SETUP_WG=${SETUP_WG,,}
 export SETUP_WG
 if [ "${SETUP_WG}" == "true" ]; then
-    bash src/setup_wg.sh  || exit $?
+    bash src/setup_wg.sh
 fi
 
 if [ "${BACKUP_TO_RESTORE:-}" != "" ]; then
