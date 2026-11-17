@@ -8,5 +8,4 @@ if [ "${SETUP_WG:-true,,}" == "true" ]; then
 fi
 ufw default deny incoming
 (ufw --force enable || true)
-
-ufw status
+(ufw status || true)
