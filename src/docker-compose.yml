@@ -31,9 +31,7 @@ services:
     environment:
       - UPSTREAM_DNS=${UPSTREAM_DNS:-cloudflare-family}
     command: ["envsubst '${UPSTREAM_DNS}' < /config-in/dnscrypt-proxy.toml > /config-out/dnscrypt-proxy.toml"]
-    networks:
-      internal:
-        ipv4_address: 172.18.0.7 # Specify the IP address for the config-render container on the internal network
+    network_mode: none
   dnscrypt-proxy:
     image: mshafer1/dnscrypt-proxy:dnscrypt-proxy_2@sha256:ec93b99ea82d2b39f5509f7ac5cb8106cc50010cf102753fe2b2a5f1252484ea
     container_name: dnscrypt-proxy
@@ -69,17 +67,17 @@ services:
       FTLCONF_dns_listeningMode: 'ALL' # Allows any reachable client to send queries
       FTLCONF_dns_upstreams: '172.18.0.5#5053' # Specifies your container address and port
       PIHOLE_DNS_LOG_TO_FILE: 'true' # Enables logging of DNS queries to a file
-      IP_PREFIX: ${IP_PREFIX:-127.0.0}
+      BIND_IP: ${BIND_IP:-127.0.0.1}
     volumes:
       - './etc-pihole:/etc/pihole'
       - './etc-dnsmasq.d:/etc/dnsmasq.d'
     ports:
-      - "${IP_PREFIX:-127.0.0}.1:53:53/tcp"
-      - "${IP_PREFIX:-127.0.0}.1:53:53/udp"
-      - "${IP_PREFIX:-127.0.0}.1:67:67/udp"
-      - "${IP_PREFIX:-127.0.0}.1:123:123/udp"
-      - "${IP_PREFIX:-127.0.0}.1:${HTTP_PREFIX:-40}80:80/tcp"
-      - "${IP_PREFIX:-127.0.0}.1:${HTTP_PREFIX:-40}443:443/tcp"
+      - "${BIND_IP:-127.0.0.1}:53:53/tcp"
+      - "${BIND_IP:-127.0.0.1}:53:53/udp"
+      - "${BIND_IP:-127.0.0.1}:67:67/udp"
+      - "${BIND_IP:-127.0.0.1}:123:123/udp"
+      - "${BIND_IP:-127.0.0.1}:${HTTP_PREFIX:-40}80:80/tcp"
+      - "${BIND_IP:-127.0.0.1}:${HTTP_PREFIX:-40}443:443/tcp"
     networks:
       internal:
         ipv4_address: 172.18.0.6 # Specify the IP address for the pihole container on the internal network
