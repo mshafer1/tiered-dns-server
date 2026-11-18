@@ -19,4 +19,7 @@ apt-get install --no-install-recommends -y docker-ce docker-ce-cli containerd.io
 systemctl enable docker
 systemctl start docker
 
-docker --version
+echo "Which docker?"
+which docker
+
+(docker --version || true)
