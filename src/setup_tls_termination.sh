@@ -22,13 +22,12 @@ else
     echo "use TLS_RESETUP_FORCE=t to force"
 fi
 
-mkdir -p /etc/dns-over-https
-envsubst '${FQDN}' < ${source_dir}/templates/doh-server.conf > /etc/dns-over-https/doh-server.conf
+envsubst '${FQDN}' < ${source_dir}/templates/doh-proxy.service > /etc/systemd/system/doh-proxy.service
 # endregion
 
 # region: start up doh-server
-systemctl enable doh-server
-systemctl start doh-server
+systemctl daemon-reload
+systemctl enable --now doh-proxy
 # endregion
 
 # region: TLS config

@@ -1,7 +1,16 @@
 #!/bin/bash -v
 set -euo pipefail
 
-env > _env_dump.log
+on_error() {
+    local exit_code=$?
+    local file="${BASH_SOURCE[1]:-${BASH_SOURCE[0]}}"
+    local line="${BASH_LINENO[0]}"
+    local cmd="$BASH_COMMAND"
+
+    echo "Error in ${file}:${line} — '${cmd}' exited with status ${exit_code}" >&2
+}
+
+trap 'on_error' ERR
 
 if [[ ! "$ClientNames" =~ ^[A-Za-z0-9_,-]*$ ]]; then
     echo "Invalid client name in '$ClientNames' (allowed: A-Za-z0-9_-,)" >&2
