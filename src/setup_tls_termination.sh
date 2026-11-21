@@ -78,12 +78,11 @@ Unit=certbot-renew.service
 WantedBy=timers.target
 EOF
 
-rm -f /etc/cron.d/certbot-renew
 systemctl daemon-reload
 systemctl enable --now certbot-renew.timer
  
 
-pipx inject certbot certbot-nginx || true # pipx considers already installed a failure
+pipx inject --force certbot certbot-nginx || true # pipx considers already installed a failure
 
 
 mkdir -p /etc/letsencrypt
@@ -124,3 +123,5 @@ else
     echo "TLS certificate for ${FQDN} does not exist. Please run certbot to obtain it. (skipping nginx reload)"
 fi
 # end region
+
+echo "TLS setup for ${FQDN} completed"
