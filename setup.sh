@@ -49,7 +49,7 @@ UPSTREAM_DNS=${UPSTREAM_DNS:-1.0.0.3}
 FQDN=${FQDN:-router.lan}
 EOF
 docker compose pull
-docker compose up -d
+(docker compose up -d || true)
 popd
 
 FQDN="${FQDN:-}" # Default to empty string if FQDN is not set
