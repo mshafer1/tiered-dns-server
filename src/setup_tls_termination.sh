@@ -22,7 +22,7 @@ else
     echo "use TLS_RESETUP_FORCE=t to force"
 fi
 
-
+mkdir -p /etc/dns-over-https
 envsubst '${FQDN}' < ${source_dir}/templates/doh-server.conf > /etc/dns-over-https/doh-server.conf
 # endregion
 
