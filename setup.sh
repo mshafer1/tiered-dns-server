@@ -57,6 +57,8 @@ popd
 
 FQDN="${FQDN:-}" # Default to empty string if FQDN is not set
 
+echo "FQDN is set to '${FQDN}'"
+
 if [ -z "${FQDN}" ] || [[ "${FQDN}" != *.* ]]; then
     # no dot in FQDN
     echo "FQDN is not set (or not set to a domain), skipping TLS setup"
