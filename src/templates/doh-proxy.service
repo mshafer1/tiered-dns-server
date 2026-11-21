@@ -1,0 +1,13 @@
+[Unit]
+Description=DNS-over-HTTPS proxy
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/doh-proxy --hostname ${FQDN} --listen-address 127.0.0.1:8053 --server-address 172.18.0.6:53 --path /dns-query
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target
