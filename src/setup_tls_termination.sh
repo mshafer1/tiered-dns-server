@@ -57,10 +57,7 @@ chmod +x /etc/letsencrypt/acme-dns-auth.py
 export ACME_DNS_USE_MTLS=${ACME_DNS_USE_MTLS:-true}
 export HTTP_PREFIX=${HTTP_PREFIX:-40}
 
-if [ -f /etc/letsencrypt/conf.json ] && [ -n "${force}" ]; then
-    echo "Skipping rendering acme-dns config to avoid resetting it"
-    echo "use TLS_RESETUP_FORCE=t to force"
-else
+if [ ! -f /etc/letsencrypt/conf.json ] || [ -n "${force}" ]; then
     # replace only ${ACME_DNS_USE_MTLS} and ${ACME_DNS_URL}
     mkdir -p /etc/letsencrypt
     envsubst '${ACME_DNS_USE_MTLS} ${ACME_DNS_URL}' < ${source_dir}/templates/acme-dns-conf.json > /etc/letsencrypt/conf.json
@@ -72,6 +69,9 @@ else
     echo "certbot --nginx -v --non-interactive --manual --manual-auth-hook /etc/letsencrypt/acme-dns-auth.py \
         --preferred-challenges dns --no-redirect --debug-challenges -d ${FQDN}"
     echo "#######"
+else
+    echo "Skipping rendering acme-dns config to avoid resetting it"
+    echo "use TLS_RESETUP_FORCE=t to force"
 fi
 
 if [[ "${ACME_DNS_USE_MTLS}" == "true" ]] && [ ! -f /etc/letsencrypt/client.crt ]; then
