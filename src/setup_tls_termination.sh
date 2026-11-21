@@ -1,7 +1,13 @@
 #!/bin/bash -v
 set -euo pipefail
 
-apt-get install -y nginx doh-server gettext-base pipx
+#TODO: renovate update this?
+(pushd /tmp/
+wget https://github.com/DNSCrypt/doh-server/releases/download/0.11.1/doh-proxy_0.11.1-1_amd64.deb
+apt-get install -y ./doh-proxy_0.11.1-1_amd64.deb
+popd)
+
+apt-get install -y nginx gettext-base pipx
 
 force="${TLS_RESETUP_FORCE:-}"
 source_dir=$(dirname $0)
