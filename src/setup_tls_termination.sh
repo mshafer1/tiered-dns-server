@@ -88,7 +88,9 @@ mkdir -p /etc/letsencrypt
 wget -O /etc/letsencrypt/acme-dns-auth.py https://github.com/mshafer1/acme-dns-certbot-joohoi/raw/refs/heads/master/acme-dns-auth.py
 chmod +x /etc/letsencrypt/acme-dns-auth.py
 
-export ACME_DNS_USE_MTLS=${ACME_DNS_USE_MTLS:-true}
+ACME_DNS_USE_MTLS=${ACME_DNS_USE_MTLS:-true}
+ACME_DNS_USE_MTLS=${ACME_DNS_USE_MTLS,,}
+export ACME_DNS_USE_MTLS
 export HTTP_PREFIX=${HTTP_PREFIX:-40}
 
 if [ ! -f /etc/letsencrypt/conf.json ] || [ -n "${force}" ]; then
