@@ -14,11 +14,10 @@ source_dir=$(dirname $0)
 
 # region: render templates
 
-if [ ! -f /etc/letsencrypt/conf.json ] || [ -n "${force}" ]; then
+if [ ! -f /etc/nginx/sites-enabled/pihole ] || [ -n "${force}" ]; then
     # only replace FQDN and HTTP_PREFIX
     envsubst '${FQDN} ${HTTP_PREFIX}' < ${source_dir}/templates/nginx.conf > /etc/nginx/sites-enabled/pihole
 else
-if [ -f /etc/nginx/sites-enabled/pihole ] && [ -z "${force}" ]; then
     echo "Skipping rendering nginx config to avoid resetting it"
     echo "use TLS_RESETUP_FORCE=t to force"
 fi
