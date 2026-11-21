@@ -52,6 +52,7 @@ FQDN=${FQDN:-router.lan}
 EOF
 docker compose pull
 (docker compose up -d || true)
+echo "got to line after docker compose up"
 popd
 
 FQDN="${FQDN:-}" # Default to empty string if FQDN is not set
