@@ -109,7 +109,7 @@ else
 fi
 
 if [[ "${ACME_DNS_USE_MTLS}" == "true" ]] && [ ! -f /etc/letsencrypt/client.crt ]; then
-    echo "MTLS is enabled but mTLS certificate for ${ACME_DNS_URL} does not exist"
+    echo "MTLS is enabled but mTLS certificate does not exist at /etc/letsencrypt/client.crt"
     exit 1
 fi
 
