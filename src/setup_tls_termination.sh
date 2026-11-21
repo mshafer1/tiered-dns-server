@@ -51,7 +51,7 @@ else
     echo "Error: Certbot failed to install"
     exit 1
 fi
- 
+
 certbot_bin=$(command -v certbot)
 
 cat > /etc/systemd/system/certbot-renew.service <<EOF
@@ -80,7 +80,6 @@ EOF
 
 systemctl daemon-reload
 systemctl enable --now certbot-renew.timer
- 
 
 pipx inject --force certbot certbot-nginx || true # pipx considers already installed a failure
 
