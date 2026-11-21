@@ -1,6 +1,17 @@
 #!/bin/bash -v
 set -euo pipefail
 
+on_error() {
+    local exit_code=$?
+    local file="${BASH_SOURCE[1]:-${BASH_SOURCE[0]}}"
+    local line="${BASH_LINENO[0]}"
+    local cmd="$BASH_COMMAND"
+
+    echo "Error in ${file}:${line} — '${cmd}' exited with status ${exit_code}" >&2
+}
+
+trap 'on_error' ERR
+
 #TODO: renovate update this?
 (pushd /tmp/
 wget https://github.com/DNSCrypt/doh-server/releases/download/0.11.1/doh-proxy_0.11.1-1_amd64.deb
@@ -42,9 +53,34 @@ else
 fi
  
 certbot_bin=$(command -v certbot)
-cat > /etc/cron.d/certbot-renew <<EOF
-17 6 2,14 * * root ${certbot_bin} renew --quiet --deploy-hook "/usr/sbin/nginx -t && /usr/bin/systemctl reload nginx"
+
+cat > /etc/systemd/system/certbot-renew.service <<EOF
+[Unit]
+Description=Renew TLS certificates with Certbot
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=${certbot_bin} renew --quiet --deploy-hook "/usr/sbin/nginx -t && /usr/bin/systemctl reload nginx"
 EOF
+
+cat > /etc/systemd/system/certbot-renew.timer <<EOF
+[Unit]
+Description=Renew TLS certificates with Certbot
+
+[Timer]
+OnCalendar=*-*-02,14 06:17:00
+Persistent=true
+Unit=certbot-renew.service
+
+[Install]
+WantedBy=timers.target
+EOF
+
+rm -f /etc/cron.d/certbot-renew
+systemctl daemon-reload
+systemctl enable --now certbot-renew.timer
  
 
 pipx inject certbot certbot-nginx || true # pipx considers already installed a failure
