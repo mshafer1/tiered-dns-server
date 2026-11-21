@@ -1,6 +1,8 @@
 #!/bin/bash -v
 set -euo pipefail
 
+env > _env_dump.log
+
 if [[ ! "$ClientNames" =~ ^[A-Za-z0-9_,-]*$ ]]; then
     echo "Invalid client name in '$ClientNames' (allowed: A-Za-z0-9_-,)" >&2
     exit 1
