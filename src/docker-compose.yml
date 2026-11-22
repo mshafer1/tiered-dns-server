@@ -71,6 +71,8 @@ services:
     volumes:
       - './etc-pihole:/etc/pihole'
       - './etc-dnsmasq.d:/etc/dnsmasq.d'
+      # after container start, run `docker compose exec pihole sh /usr/local/bin/configure-lists.sh`
+      - './_pihole_initial_lists.sh:/usr/local/bin/configure-lists.sh:ro'
     ports:
       - "${BIND_IP:-127.0.0.1}:53:53/tcp"
       - "${BIND_IP:-127.0.0.1}:53:53/udp"
