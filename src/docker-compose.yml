@@ -77,7 +77,6 @@ services:
       - "${BIND_IP:-127.0.0.1}:67:67/udp"
       - "${BIND_IP:-127.0.0.1}:123:123/udp"
       - "${BIND_IP:-127.0.0.1}:${HTTP_PREFIX:-}80:80/tcp"
-      - "${BIND_IP:-127.0.0.1}:${HTTP_PREFIX:-}443:443/tcp"
     networks:
       internal:
         ipv4_address: 172.18.0.6 # Specify the IP address for the pihole container on the internal network
