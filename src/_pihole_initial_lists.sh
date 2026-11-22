@@ -1,5 +1,6 @@
 #!/bin/bash
 # Path: ~/pihole/configure-lists.sh
+DB_PATH=${DB_PATH:-/etc/pihole/gravity.db}
 
 # Insert or update your lists with comments and enabled states (1 = active, 0 = disabled)
 pihole-FTL sqlite3 "$DB_PATH" <<EOF
