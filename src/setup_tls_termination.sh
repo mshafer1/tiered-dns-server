@@ -102,7 +102,7 @@ if [ ! -f /etc/letsencrypt/conf.json ] || [ -n "${force}" ]; then
     CERTBOT_DOMAIN=${FQDN} CERTBOT_VALIDATION=placeholder /etc/letsencrypt/acme-dns-auth.py
 
     echo "Once DNS records are set, run the following command to register with acme-dns:"
-    echo "certbot --nginx -v --non-interactive --manual --manual-auth-hook /etc/letsencrypt/acme-dns-auth.py \
+    echo "certbot --nginx -v --non-interactive --manual-auth-hook /etc/letsencrypt/acme-dns-auth.py \
         --preferred-challenges dns --no-redirect --debug-challenges -d ${FQDN}"
     echo "#######"
 else
@@ -122,7 +122,9 @@ if [ -f /etc/letsencrypt/live/${FQDN}/fullchain.pem ]; then
     systemctl reload nginx
 else
     echo "TLS certificate for ${FQDN} does not exist. Please run certbot to obtain it. (skipping nginx reload)"
-    echo "Please run: certbot certonly --nginx -d ${FQDN} --manual --manual-auth-hook /etc/letsencrypt/acme-dns-auth.py --preferred-challenges dns --debug-challenges"
+    echo "Please run:"
+    echo "certbot certonly --manual -d ${FQDN} --manual-auth-hook /etc/letsencrypt/acme-dns-auth.py --preferred-challenges dns --debug-challenges"
+    echo "certbot --nginx -d ${FQDN} --manual-auth-hook /etc/letsencrypt/acme-dns-auth.py --preferred-challenges dns --debug-challenges"
     exit 1
 fi
 # end region
