@@ -122,7 +122,7 @@ if [ -f /etc/letsencrypt/live/${FQDN}/fullchain.pem ]; then
     systemctl reload nginx
 else
     echo "TLS certificate for ${FQDN} does not exist. Please run certbot to obtain it. (skipping nginx reload)"
-    echo "Please run: certbot certonly --nginx -d ${FQDN} --manual-auth-hook /etc/letsencrypt/acme-dns-auth.py --preferred-challenges dns --debug-challenges"
+    echo "Please run: certbot certonly --nginx -d ${FQDN} --manual --manual-auth-hook /etc/letsencrypt/acme-dns-auth.py --preferred-challenges dns --debug-challenges"
     exit 1
 fi
 # end region
