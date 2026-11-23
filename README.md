@@ -44,9 +44,6 @@ compromised (sites did get through that shouldn't have).
 - dnscrypt-proxy (requirement from Pi-hole for DoH upstream)
 - Chosen upstream DNS server (this is left to the user)
 - Wireguard
-  - wg-easy (admin Web UI)
-- Cloudflare 0 Trust tunnel (in Docker)
-  used for secure access to management without opening ports
 - Automated backups of config using RSnapshot
 
 ## Why not (some favorite other project)?
@@ -56,12 +53,11 @@ I will spare you the details on many of the choices in this tech stack, but if y
 
 ## How is this tiered?
 
-If an account is made with the upstream DNS server, it can be configured to do filtering.
+If an account is made with the upstream DNS server, it can be configured to do filtering (or use a DNS server that offers filtering already).
 Running Pi-hole at this level allows for a second layer of shared filtering.
 Finally, the on-prem nodes are also able to filter their own lists (without forwarding).
 
-In this way, there are 3 tiers of configuration available.
-
+Ergo, there are 3 tiers of filtering in a standard deployment.
 
 ## Deploying
 
@@ -82,7 +78,7 @@ exec > >(tee -i /var/log/stackscript_1.log)
 # ================================================================
 
 export hostname=dns_hub
-export fqdn=pihole.dns_hub.lan
+export FQDN=pihole.dns_hub.lan
 export ClientNames=comma,separate,list-of-names,to,generate-configs-for
 export BackupLocation=/mnt/tiered_dns_backup
 export restore_backup="${restore_backup:-}"

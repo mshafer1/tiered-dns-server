@@ -1,0 +1,7 @@
+{
+    "acmedns_url": "${ACME_DNS_URL}",
+    "storage_path": "/etc/letsencrypt/acme-dns-storage.json",
+    "use_mtls": ${ACME_DNS_USE_MTLS},
+    "mtls_cert_path": "/etc/letsencrypt/client.crt",
+    "mtls_key_path": "/etc/letsencrypt/client.key"
+}
