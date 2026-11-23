@@ -31,12 +31,6 @@ bash src/setup_rsnapshot.sh
 bash src/install_docker.sh
 bash src/setup_ufw.sh
 bash src/setup_updates.sh
-SETUP_WG=${SETUP_WG:-true}
-SETUP_WG=${SETUP_WG,,}
-export SETUP_WG
-if [ "${SETUP_WG}" == "true" ]; then
-    bash src/setup_wg.sh
-fi
 
 if [ "${BACKUP_TO_RESTORE:-}" != "" ]; then
     # not quoting because it should be two args, the backup name and the snapshot index, separated by a space
